@@ -1,3 +1,6 @@
 credentials
 *.card
 connection.json
+channel-artifacts
+crypto-config
+credentials
