@@ -1,0 +1,53 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace net.ap
+
+// Device
+participant Device identified by DeviceID {
+  o String DeviceID
+  o Device[] connectedDevice
+  o Device currentAP
+  o String deviceMAC
+}
+
+transaction registerDevice {
+  o String newDeviceMAC
+  o String time
+  o String deviceFrom
+}
+
+transaction connectDevice {
+  o Device deviceFrom
+  o Device deviceTo
+}
+
+transaction disconnectDevice {
+  o Device deviceFrom
+  o Device deviceTo
+}
+
+event DeviceConnected {
+  o Device deviceFrom
+  o Device deviceTo
+}
+
+event DeviceDisconnected {
+  o Device deviceFrom
+  o Device deviceTo
+}
