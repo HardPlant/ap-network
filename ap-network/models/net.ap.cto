@@ -21,8 +21,8 @@ namespace net.ap
 // Device
 participant Device identified by DeviceID {
   o String DeviceID
-  o Device[] connectedDevice
-  o Device currentAP
+  o String[] connectedDevice
+  o String currentAP
   o String deviceMAC
 }
 
