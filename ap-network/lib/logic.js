@@ -31,7 +31,6 @@ async function registerDevice(tx) {
     const newDevice = factory.newResource('net.ap','Device', tx.time)
 
     newDevice.newDeviceMAC = tx.newDeviceMAC
-    newDevice.time = tx.time
     newDevice.deviceFrom = tx.deviceFrom
 
     await participantRegistry.add(newDevice);
@@ -43,12 +42,17 @@ async function registerDevice(tx) {
  * @transaction
  */
 async function connectDevice(tx) {
-    tx.deviceFrom.currentAP = tx.deviceTo;
-
     // Get the asset registry for the asset.
     const Registry = await getParticipantRegistry('net.ap.Device');
+    var ConnectingDevice = Registry.get(tx.deviceFrom)
+    var TargetDevice = Registry.get(tx.deviceFrom)
+
+    ConnectingDevice.currentAP = TargetDevice.DeviceID;
+    TargetDevice.connectedDevice.push(ConnectingDevice.DeviceID);
+
     // Update the asset in the asset registry.
-    await Registry.update(tx.asset);
+    await Registry.update(tx.ConnectingDevice);
+    await Registry.update(tx.TargetDevice);
 
     // Emit an event for the modified asset.
     let event = getFactory().newEvent('net.ap', 'DeviceConnected');
@@ -63,12 +67,17 @@ async function connectDevice(tx) {
  * @transaction
  */
 async function disconnectDevice(tx) {
-    tx.deviceFrom.currentAP = tx.deviceTo;
-
     // Get the asset registry for the asset.
     const Registry = await getParticipantRegistry('net.ap.Device');
+    var DisconnectingDevice = Registry.get(tx.deviceFrom)
+    var TargetDevice = Registry.get(tx.deviceFrom)
+
+    DisconnectingDevice.currentAP = "";
+    TargetDevice.connectedDevice = TargetDevice.filter(e=> e !==DisconnectingDevice.DeviceID);
+
     // Update the asset in the asset registry.
-    await Registry.update(tx.asset);
+    await Registry.update(tx.ConnectingDevice);
+    await Registry.update(tx.TargetDevice);
 
     // Emit an event for the modified asset.
     let event = getFactory().newEvent('net.ap', 'DeviceDisconnected');

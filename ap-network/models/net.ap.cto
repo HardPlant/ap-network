@@ -28,7 +28,6 @@ participant Device identified by DeviceID {
 
 transaction registerDevice {
   o String newDeviceMAC
-  o String time
   o String deviceFrom
 }
 

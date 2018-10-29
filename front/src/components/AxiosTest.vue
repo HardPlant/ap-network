@@ -43,17 +43,13 @@ export default {
         },
         connectDevice: function(){
             var transaction = {
-                "$class": "net.ap.registerDevice",
-                "newDeviceMAC": "string",
-                "time": "string",
                 "deviceFrom": "string",
-                "transactionId": "string",
-                "timestamp": "2018-10-29T04:48:31.437Z"
+                "deviceTo": "string",
                 }
             this.$http.post(`${baseURI}/`).then(
                 (result)=>{
                     this.message=result;
-                
+
                 })
         },
         getConnectionTransaction: function(){
