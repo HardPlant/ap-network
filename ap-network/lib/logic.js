@@ -76,7 +76,7 @@ async function disconnectDevice(tx) {
     TargetDevice.connectedDevice = TargetDevice.connectedDevice.filter(e=> e !==DisconnectingDevice.DeviceID);
 
     // Update the asset in the asset registry.
-    await Registry.update(ConnectingDevice);
+    await Registry.update(DisconnectingDevice);
     await Registry.update(TargetDevice);
 
     // Emit an event for the modified asset.
