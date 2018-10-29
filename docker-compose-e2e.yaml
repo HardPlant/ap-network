@@ -1,0 +1,160 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+  ca0:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-org1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.net.ap-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/792e3fb9e2e4f7f9e2a84f5368e6e61d4b96954156484b46dc2ace946e7f7f2d_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.net.ap-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/792e3fb9e2e4f7f9e2a84f5368e6e61d4b96954156484b46dc2ace946e7f7f2d_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/org1.net.ap/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg1
+    networks:
+      ipv4_address: 172.20.128.10
+
+  zookeeper0:
+    container_name: zookeeper0
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    networks:
+      ipv4_address: 172.20.1.10
+
+  zookeeper1:
+    container_name: zookeeper1
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    networks:
+      ipv4_address: 172.20.1.20
+
+  zookeeper2:
+    container_name: zookeeper2
+    extends:
+      file: base/docker-compose-base.yaml
+      service: zookeeper
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
+    networks:
+      ipv4_address: 172.20.1.30
+
+  kafka0:
+    container_name: kafka0
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=0
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      ipv4_address: 172.20.2.10
+
+  kafka1:
+    container_name: kafka1
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      ipv4_address: 172.20.2.20
+
+  kafka2:
+    container_name: kafka2
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      ipv4_address: 172.20.2.30
+
+  kafka3:
+    container_name: kafka3
+    extends:
+      file: base/docker-compose-base.yaml
+      service: kafka
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    depends_on:
+      - zookeeper0
+      - zookeeper1
+      - zookeeper2
+    networks:
+      ipv4_address: 172.20.2.40
+
+  orderer.net.ap:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.net.ap
+    container_name: orderer.net.ap
+    depends_on:
+      - kafka0
+      - kafka1
+      - kafka2
+      - kafka3
+    networks:
+      ipv4_address: 172.20.10.10
+
+  peer0.org1.net.ap:
+    container_name: peer0.org1.net.ap
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.org1.net.ap
+    networks:
+      ipv4_address: 172.20.20.10
+
+  peer1.org1.net.ap:
+    container_name: peer1.org1.net.ap
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.org1.net.ap
+    networks:
+      ipv4_address: 172.20.20.20
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
