@@ -3,12 +3,12 @@
     "composer": "^0.20.2"
   },
   "name": "ap-network",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "An AP Logging network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/ap-network.bna",
-    "pretest": "npm run lint",
-    "lint": "eslint .",
+    "cinstall": "composer network install -c PeerAdmin@hlfv1 -a dist/ap-network.bna",
+    "cupgrade":"",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js"
   },
   "keywords": [
@@ -32,5 +32,6 @@
     "nyc": "latest",
     "mkdirp": "latest",
     "mocha": "latest"
-  }
+  },
+  "dependencies": {}
 }

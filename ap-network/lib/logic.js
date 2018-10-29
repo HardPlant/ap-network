@@ -44,15 +44,15 @@ async function registerDevice(tx) {
 async function connectDevice(tx) {
     // Get the asset registry for the asset.
     const Registry = await getParticipantRegistry('net.ap.Device');
-    var ConnectingDevice = Registry.get(tx.deviceFrom)
-    var TargetDevice = Registry.get(tx.deviceFrom)
+    var ConnectingDevice = await Registry.get(tx.deviceFrom);
+    var TargetDevice = await Registry.get(tx.deviceFrom);
 
     ConnectingDevice.currentAP = TargetDevice.DeviceID;
     TargetDevice.connectedDevice.push(ConnectingDevice.DeviceID);
 
     // Update the asset in the asset registry.
-    await Registry.update(tx.ConnectingDevice);
-    await Registry.update(tx.TargetDevice);
+    await Registry.update(ConnectingDevice);
+    await Registry.update(TargetDevice);
 
     // Emit an event for the modified asset.
     let event = getFactory().newEvent('net.ap', 'DeviceConnected');
@@ -69,15 +69,15 @@ async function connectDevice(tx) {
 async function disconnectDevice(tx) {
     // Get the asset registry for the asset.
     const Registry = await getParticipantRegistry('net.ap.Device');
-    var DisconnectingDevice = Registry.get(tx.deviceFrom)
-    var TargetDevice = Registry.get(tx.deviceFrom)
+    var DisconnectingDevice = await Registry.get(tx.deviceFrom)
+    var TargetDevice = await Registry.get(tx.deviceFrom)
 
     DisconnectingDevice.currentAP = "";
-    TargetDevice.connectedDevice = TargetDevice.filter(e=> e !==DisconnectingDevice.DeviceID);
+    TargetDevice.connectedDevice = TargetDevice.connectedDevice.filter(e=> e !==DisconnectingDevice.DeviceID);
 
     // Update the asset in the asset registry.
-    await Registry.update(tx.ConnectingDevice);
-    await Registry.update(tx.TargetDevice);
+    await Registry.update(ConnectingDevice);
+    await Registry.update(TargetDevice);
 
     // Emit an event for the modified asset.
     let event = getFactory().newEvent('net.ap', 'DeviceDisconnected');

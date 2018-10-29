@@ -5,4 +5,6 @@ connection.json
 channel-artifacts
 crypto-config
 credentials
-ap-network/ap-network@1.0.1.bna
+node_modules
+node_modules/*
+ap-network/.nyc_output/*

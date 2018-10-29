@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import AxiosTest from '@/components/AxiosTest'
+import DeviceListViewer from '@/components/DeviceListViewer'
+
 
 Vue.use(Router)
 
@@ -18,9 +20,9 @@ export default new Router({
       component: AxiosTest
     },
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/testDevice',
+      name: 'DeviceListViewer',
+      component: DeviceListViewer
     }
   ]
 })
