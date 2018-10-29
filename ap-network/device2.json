@@ -1,6 +1,7 @@
 {
  "$class":"net.ap.Device",
  "DeviceID":"1540778075235",
- "currentAP":["net.ap.Device#1540778075233"],
+ "currentAP":"net.ap.Device#1540778075233",
+ "connectedDevice":[],
  "deviceMAC":"02:42:ac:1b:00:04"
 }

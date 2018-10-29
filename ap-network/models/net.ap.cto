@@ -33,21 +33,21 @@ transaction registerDevice {
 }
 
 transaction connectDevice {
-  o Device deviceFrom
-  o Device deviceTo
+  o String deviceFrom
+  o String deviceTo
 }
 
 transaction disconnectDevice {
-  o Device deviceFrom
-  o Device deviceTo
+  o String deviceFrom
+  o String deviceTo
 }
 
 event DeviceConnected {
-  o Device deviceFrom
-  o Device deviceTo
+  o String deviceFrom
+  o String deviceTo
 }
 
 event DeviceDisconnected {
-  o Device deviceFrom
-  o Device deviceTo
+  o String deviceFrom
+  o String deviceTo
 }

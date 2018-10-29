@@ -3,7 +3,7 @@
     "composer": "^0.20.2"
   },
   "name": "ap-network",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "An AP Logging network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/ap-network.bna",

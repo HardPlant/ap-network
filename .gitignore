@@ -1,6 +1,8 @@
 credentials
 *.card
+*.bna
 connection.json
 channel-artifacts
 crypto-config
 credentials
+ap-network/ap-network@1.0.1.bna
