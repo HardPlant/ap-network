@@ -7,7 +7,11 @@
   "description": "An AP Logging network",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/ap-network.bna",
+    "startFabric": "~/fabric-dev-servers/startFabric.sh",
     "cinstall": "composer network install -c PeerAdmin@hlfv1 -a dist/ap-network.bna",
+    "cstart": "composer network start -c PeerAdmin@hlfv1 -n ap-network -V 1.0.5 -A admin -S adminpw",
+    "cimport": "composer card delete -c admin_auto@ap-network; composer card import -f admin@ap-network.card -c admin_auto@ap-network",
+    "crest": "composer-rest-server -c admin_auto@ap-network",
     "cupgrade":"",
     "test": "nyc mocha -t 0 test/*.js && cucumber-js"
   },
